@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  rt.hostname: rt-test.davel.me.uk
+  rt.outgoing_email_address: rt@rt-test.davel.me.uk
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: rtcpan
