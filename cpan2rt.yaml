@@ -1,0 +1,33 @@
+# home/rtcpan/perlbrew/perls/rt/bin/cpan2rt update --mirror http://www.cpan.org --home $RT --datadir $RT/var/cpan2rt_data > /dev/null 2>&1
+# Does datadir need being preserved between runs?
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cpan2rt
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      containers:
+      - name: cpan2rt
+        image: ghcr.io/davel/rtperl
+        command: ["/home/rtcpan/rt/scripts/bin/cpan2rt", "update", "--home", "/home/rtcpan/rt", "--datadir", "/home/rtcpan/rt/var/lib/cpan2rt" ]
+        env:
+        - name: RT_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: RT_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: rtcpan
+              key: rt.hostname
+        - name: RT_OUTGOING_EMAIL_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: rtcpan
+              key: rt.outgoing_email_address
+
+      restartPolicy: Never

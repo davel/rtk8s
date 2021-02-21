@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rt-app
+  labels:
+    app: rt
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: rt
+    tier: app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rt-app
+  labels:
+    app: rt
+spec:
+  selector:
+    matchLabels:
+      app: rt
+      tier: app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rt
+        tier: app
+    spec:
+      containers:
+      - name: rtapp
+        image: ghcr.io/davel/rtapp
+        readinessProbe:
+          tcpSocket:
+            port: 9000 
+        livenessProbe:
+          tcpSocket:
+            port: 9000 
+        env:
+        - name: RT_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: RT_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: rtcpan
+              key: rt.hostname
+        - name: RT_OUTGOING_EMAIL_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: rtcpan
+              key: rt.outgoing_email_address
+        - name: RT_LOG_LEVEL
+          value: info
+        ports:
+        - containerPort: 9000
+          name: fcgi
+
