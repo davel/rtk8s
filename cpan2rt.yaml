@@ -12,7 +12,7 @@ spec:
       containers:
       - name: cpan2rt
         image: ghcr.io/davel/rtperl
-        command: ["/home/rtcpan/rt/scripts/bin/cpan2rt", "update", "--home", "/home/rtcpan/rt", "--datadir", "/home/rtcpan/rt/var/lib/cpan2rt" ]
+        command: ["/home/rtcpan/rt/scripts/bin/cpan2rt", "update", "--home", "/home/rtcpan/rt", "--datadir", "/home/rtcpan/rt/var/lib/cpan2rt", "--debug" ]
         env:
         - name: RT_MYSQL_PASSWORD
           valueFrom:

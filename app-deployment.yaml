@@ -6,7 +6,7 @@ metadata:
     app: rt
 spec:
   ports:
-    - port: 3306
+    - port: 9000
   selector:
     app: rt
     tier: app

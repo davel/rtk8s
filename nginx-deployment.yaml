@@ -7,6 +7,8 @@ metadata:
 spec:
   ports:
     - port: 80
+      protocol: TCP
+      name: http
   selector:
     app: rt
     tier: frontend
@@ -34,8 +36,9 @@ spec:
       - name: rtfrontend
         image: ghcr.io/davel/rtfrontend
         readinessProbe:
-          tcpSocket:
-            port: 80 
+          httpGet:
+            path: /
+            port: 80
         livenessProbe:
           tcpSocket:
             port: 80 
