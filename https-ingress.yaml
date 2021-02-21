@@ -1,0 +1,42 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rtcpan
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`rt-test.davel.me.uk`)
+      kind: Rule
+      services:
+        - name: rt-frontend
+          port: 80
+  tls:
+    secretName: rt-test-cert
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rtcpan2
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`rt-test.davel.me.uk`)
+      kind: Rule
+      services:
+        - name: rt-frontend
+          port: 80
+      middlewares:
+        - name: redirectscheme
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirectscheme
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

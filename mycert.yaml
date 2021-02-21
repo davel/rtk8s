@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rt-test-cert
+  namespace: default
+spec:
+  commonName: rt-test.davel.me.uk
+  secretName: rt-test-cert
+  dnsNames:
+    - rt-test.davel.me.uk
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
