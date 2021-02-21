@@ -1,0 +1,27 @@
+# Initialises the RT database. Safe if already run, because it will fail at
+# CREATE DATABASE.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rt-setup-database
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      containers:
+      - name: rt-setup-database
+        image: ghcr.io/davel/rtperl
+        command: ["/home/rtcpan/rt/sbin/rt-setup-database", "--action", "init" ]
+        env:
+        - name: RT_DBA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: root-password
+        - name: RT_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+      restartPolicy: Never
