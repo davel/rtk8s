@@ -8,7 +8,7 @@ spec:
   ports:
     - port: 3306
   selector:
-    app: rtcpan
+    app: rt
     tier: database
   clusterIP: None
 ---
